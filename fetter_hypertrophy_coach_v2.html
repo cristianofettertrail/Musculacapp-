@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0f14" />
+  <title>Fetter Hypertrophy Coach</title>
+
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:#121821;
+      --card:#171f2b;
+      --card2:#1d2734;
+      --text:#f4f7fb;
+      --muted:#9aa7b8;
+      --border:#2a3646;
+      --accent:#55e59d;
+      --accent2:#35c87f;
+      --danger:#ff7070;
+      --warn:#f7c96b;
+      --shadow:0 12px 30px rgba(0,0,0,.18);
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      color:var(--text);
+      background:linear-gradient(180deg,#0b0f14,#0e141d);
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    }
+
+    button,input,textarea,select{font:inherit}
+    button{touch-action:manipulation}
+    .app{
+      width:min(980px,100%);
+      margin:0 auto;
+      padding:14px 12px 90px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:12px;
+    }
+    .brand small{
+      display:block;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+    .brand strong{font-size:19px}
+    .small-btn{
+      min-height:42px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:var(--card);
+      color:var(--text);
+      padding:0 12px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .focus-card{
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:
+        radial-gradient(circle at top right, rgba(85,229,157,.16), transparent 34%),
+        var(--panel);
+      padding:17px;
+      box-shadow:var(--shadow);
+    }
+    .eyebrow{
+      color:var(--muted);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+    .focus-card h1{
+      margin:6px 0 5px;
+      font-size:22px;
+      line-height:1.12;
+    }
+    .focus-card p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.48;
+    }
+
+    .progress-meta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:14px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .progress{
+      height:13px;
+      margin-top:7px;
+      background:#26313f;
+      border-radius:999px;
+      overflow:hidden;
+    }
+    .progress > div{
+      height:100%;
+      width:0;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--accent2),var(--accent));
+      transition:width .25s ease;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:7px;
+      margin:10px 0 14px;
+    }
+    .stat{
+      min-width:0;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:var(--card);
+      padding:11px;
+    }
+    .stat span{display:block;color:var(--muted);font-size:10px}
+    .stat strong{
+      display:block;
+      margin-top:4px;
+      font-size:17px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .tabs{
+      position:sticky;
+      top:0;
+      z-index:20;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:7px;
+      padding:7px 0 10px;
+      background:linear-gradient(180deg,rgba(11,15,20,.98) 72%,rgba(11,15,20,0));
+      backdrop-filter:blur(8px);
+    }
+    .tab{
+      min-height:44px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:var(--card);
+      color:var(--muted);
+      cursor:pointer;
+      font-size:10px;
+      font-weight:950;
+      padding:6px 3px;
+    }
+    .tab.active{
+      background:var(--accent);
+      border-color:var(--accent);
+      color:#07110c;
+    }
+
+    .panel{display:none}
+    .panel.active{display:block}
+
+    .section-head{
+      margin:13px 2px 9px;
+    }
+    .section-head h2{margin:3px 0 0;font-size:19px}
+    .section-head p{
+      margin:5px 0 0;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .card{
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:var(--card);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    .card + .card{margin-top:10px}
+
+    .today-head{
+      padding:15px;
+      border-bottom:1px solid var(--border);
+    }
+    .row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      color:var(--muted);
+      padding:5px 9px;
+      font-size:10px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .pill.accent{color:var(--accent);border-color:rgba(85,229,157,.35)}
+    .pill.done{color:var(--accent);background:rgba(85,229,157,.07);border-color:rgba(85,229,157,.25)}
+    .today-head h2{margin:8px 0 4px;font-size:19px}
+    .today-head p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}
+
+    .exercise{
+      padding:13px 15px;
+      border-bottom:1px solid var(--border);
+    }
+    .exercise:last-child{border-bottom:0}
+    .exercise h3{margin:4px 0 0;font-size:15px}
+    .exercise-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:8px;
+    }
+    .mini{
+      border:1px solid var(--border);
+      background:var(--card2);
+      border-radius:999px;
+      color:#dbe4ee;
+      padding:5px 8px;
+      font-size:10px;
+    }
+    details{
+      margin-top:9px;
+      border:1px solid var(--border);
+      border-radius:11px;
+      background:var(--panel);
+      padding:9px 10px;
+    }
+    summary{
+      color:var(--accent);
+      font-size:11px;
+      font-weight:900;
+      cursor:pointer;
+    }
+    details p{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.5;
+    }
+
+    .check-zone{
+      padding:15px;
+      background:linear-gradient(180deg,var(--card),var(--panel));
+    }
+    .check-title{
+      color:var(--muted);
+      font-size:11px;
+      margin-bottom:7px;
+    }
+    .effort-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:7px;
+      margin-bottom:10px;
+    }
+    .effort{
+      min-height:46px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:var(--card2);
+      color:var(--text);
+      cursor:pointer;
+      font-size:11px;
+      font-weight:900;
+    }
+    .effort.selected{
+      border-color:var(--accent);
+      color:var(--accent);
+      background:rgba(85,229,157,.07);
+    }
+    .pain-line{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin:10px 0 13px;
+      color:var(--muted);
+      font-size:11px;
+    }
+    .pain-line input{
+      width:20px;height:20px;
+      accent-color:var(--accent);
+    }
+    .complete{
+      width:100%;
+      min-height:58px;
+      border:0;
+      border-radius:15px;
+      background:linear-gradient(90deg,var(--accent2),var(--accent));
+      color:#07110c;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:1000;
+      letter-spacing:.02em;
+    }
+
+    .week-card,.session-row,.history-card{
+      padding:13px;
+      transition:opacity .2s ease,filter .2s ease;
+    }
+    .week-card.done,.session-row.done{
+      opacity:.36;
+      filter:saturate(.55);
+    }
+    .done .session-name{text-decoration:line-through}
+    .session-name{margin:4px 0;font-size:14px;font-weight:900}
+    .session-focus{color:var(--muted);font-size:11px;line-height:1.4}
+
+    .week-list,.month-list,.history-list{display:grid;gap:9px}
+
+    .month-week{padding:13px}
+    .month-week h3{margin:3px 0;font-size:14px}
+    .month-week p{
+      margin:4px 0 10px;
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.4;
+    }
+    .session-row{
+      margin-top:7px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:var(--panel);
+    }
+
+    .coach-hero{
+      padding:16px;
+      border:1px solid rgba(85,229,157,.25);
+      border-radius:var(--radius);
+      background:rgba(85,229,157,.055);
+    }
+    .coach-hero h2{margin:5px 0;font-size:18px}
+    .coach-hero p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
+
+    .coach-actions{
+      display:grid;
+      gap:9px;
+      margin-top:11px;
+    }
+    .action-btn{
+      width:100%;
+      min-height:54px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:var(--card);
+      color:var(--text);
+      cursor:pointer;
+      text-align:left;
+      padding:12px 14px;
+    }
+    .action-btn strong{display:block;font-size:13px}
+    .action-btn span{display:block;margin-top:3px;color:var(--muted);font-size:10px;line-height:1.4}
+    .action-btn.primary{
+      background:var(--accent);
+      border-color:var(--accent);
+      color:#07110c;
+    }
+    .action-btn.primary span{color:#16452d}
+    .action-btn:disabled{opacity:.45;cursor:not-allowed}
+
+    .coach-status{
+      margin-top:11px;
+      border:1px solid var(--border);
+      border-radius:13px;
+      background:var(--panel);
+      padding:12px;
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.5;
+    }
+    .coach-status strong{color:var(--text)}
+
+    .history-card{
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:var(--card);
+    }
+    .history-card p{margin:5px 0;color:var(--muted);font-size:11px}
+    .undo-btn{
+      margin-top:9px;
+      min-height:39px;
+      border:1px solid rgba(255,112,112,.25);
+      border-radius:10px;
+      background:rgba(255,112,112,.06);
+      color:#ffd6d6;
+      cursor:pointer;
+      padding:0 10px;
+      font-size:10px;
+      font-weight:900;
+    }
+
+    .empty{
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:var(--card);
+      color:var(--muted);
+      text-align:center;
+      padding:22px 15px;
+      font-size:12px;
+      line-height:1.55;
+    }
+
+    dialog{
+      width:min(94vw,650px);
+      max-height:88vh;
+      overflow:auto;
+      border:1px solid var(--border);
+      border-radius:19px;
+      background:var(--card);
+      color:var(--text);
+      padding:0;
+      box-shadow:0 22px 70px rgba(0,0,0,.5);
+    }
+    dialog::backdrop{background:rgba(0,0,0,.7)}
+    .dialog-body{padding:16px}
+    .dialog-body h3{margin:0;font-size:18px}
+    .dialog-body > p{color:var(--muted);font-size:11px;line-height:1.5}
+
+    textarea,input[type="text"]{
+      width:100%;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:var(--panel);
+      color:var(--text);
+      padding:11px;
+      font-size:16px;
+      outline:none;
+    }
+    textarea{
+      min-height:260px;
+      resize:vertical;
+      line-height:1.45;
+    }
+    .field{display:block;margin-top:11px}
+    .field span{display:block;margin-bottom:5px;color:var(--muted);font-size:10px;font-weight:900}
+
+    .dialog-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+      margin-top:11px;
+    }
+    .dialog-btn{
+      min-height:43px;
+      border:1px solid var(--border);
+      border-radius:11px;
+      background:var(--panel);
+      color:var(--text);
+      cursor:pointer;
+      padding:0 12px;
+      font-size:11px;
+      font-weight:900;
+    }
+    .dialog-btn.primary{
+      background:var(--accent);
+      border-color:var(--accent);
+      color:#07110c;
+    }
+    .dialog-btn.danger{
+      color:#ffd8d8;
+      border-color:rgba(255,112,112,.25);
+      background:rgba(255,112,112,.06);
+    }
+
+    .format-box{
+      margin-top:11px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:var(--panel);
+      padding:10px;
+      color:var(--muted);
+      font-size:10px;
+      line-height:1.5;
+    }
+    .format-box code{color:#dbe4ee}
+
+    .toast{
+      display:none;
+      position:fixed;
+      z-index:100;
+      left:50%;
+      bottom:18px;
+      transform:translateX(-50%);
+      width:min(92vw,520px);
+      border-radius:14px;
+      background:#eafbf2;
+      color:#0a2b1b;
+      padding:13px 14px;
+      font-size:12px;
+      font-weight:900;
+      box-shadow:0 18px 60px rgba(0,0,0,.4);
+    }
+    .toast.show{display:block}
+
+    @media(max-width:620px){
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .focus-card h1{font-size:20px}
+      .tab{font-size:9px}
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      *{transition:none!important;scroll-behavior:auto!important}
+    }
+  </style>
+</head>
+
+<body>
+<main class="app">
+  <header class="topbar">
+    <div class="brand">
+      <small>Fetter Lab</small>
+      <strong>Upper Body Coach</strong>
+    </div>
+    <button class="small-btn" id="settingsBtn">⚙️</button>
+  </header>
+
+  <section class="focus-card">
+    <div class="eyebrow">Foco do mês</div>
+    <h1 id="focusTitle"></h1>
+    <p id="focusSub"></p>
+
+    <div class="progress-meta">
+      <span>Progresso do bloco</span>
+      <strong id="progressText">0/12</strong>
+    </div>
+    <div class="progress"><div id="progressBar"></div></div>
+  </section>
+
+  <section class="stats">
+    <div class="stat"><span>Treinos</span><strong id="statDone">0/12</strong></div>
+    <div class="stat"><span>Progresso</span><strong id="statPct">0%</strong></div>
+    <div class="stat"><span>Sequência</span><strong id="statStreak">0 🔥</strong></div>
+    <div class="stat"><span>XP</span><strong id="statXp">0</strong></div>
+  </section>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="day">HOJE</button>
+    <button class="tab" data-tab="week">SEMANA</button>
+    <button class="tab" data-tab="month">MÊS</button>
+    <button class="tab" data-tab="coach">TREINADOR</button>
+  </nav>
+
+  <section class="panel active" id="panel-day">
+    <div class="section-head">
+      <div class="eyebrow">Treino do dia</div>
+      <h2>Próximo treino</h2>
+      <p>Treina, marca como foi e dá um check. Só isso.</p>
+    </div>
+    <div id="todayContainer"></div>
+  </section>
+
+  <section class="panel" id="panel-week">
+    <div class="section-head">
+      <div class="eyebrow">Treino da semana</div>
+      <h2 id="weekTitle">Semana atual</h2>
+      <p>Os treinos concluídos ficam apagados automaticamente.</p>
+    </div>
+    <div id="weekContainer" class="week-list"></div>
+  </section>
+
+  <section class="panel" id="panel-month">
+    <div class="section-head">
+      <div class="eyebrow">Treino do mês</div>
+      <h2>Bloco completo</h2>
+      <p>4 semanas. O foco mensal fica fixo; as semanas podem ser atualizadas pelo treinador.</p>
+    </div>
+    <div id="monthContainer" class="month-list"></div>
+  </section>
+
+  <section class="panel" id="panel-coach">
+    <div class="coach-hero">
+      <div class="eyebrow">Treinador</div>
+      <h2>Uma conversa por semana</h2>
+      <p>Durante a semana, só treina. Quando a semana acabar, o app monta o resumo para você colar no seu Projeto do ChatGPT.</p>
+    </div>
+
+    <div class="coach-actions">
+      <button class="action-btn primary" id="reviewBtn">
+        <strong>🧠 REVISÃO DA SEMANA</strong>
+        <span>Gera e copia o resumo completo para o treinador.</span>
+      </button>
+
+      <button class="action-btn" id="updateWeekBtn">
+        <strong>📥 ATUALIZAR PRÓXIMA SEMANA</strong>
+        <span>Cole o bloco que o treinador devolver e o app atualiza sozinho.</span>
+      </button>
+
+      <button class="action-btn" id="historyBtn">
+        <strong>📚 VER HISTÓRICO</strong>
+        <span>Veja checks, esforço percebido e dor das sessões concluídas.</span>
+      </button>
+    </div>
+
+    <div class="coach-status" id="coachStatus"></div>
+  </section>
+</main>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<dialog id="reviewDialog">
+  <div class="dialog-body">
+    <h3>Revisão da semana</h3>
+    <p>Este texto já está pronto para colar na sua conversa principal do Projeto Fetter Hypertrophy Coach.</p>
+
+    <textarea id="reviewText" readonly></textarea>
+
+    <div class="dialog-actions">
+      <button class="dialog-btn primary" id="copyReviewBtn">COPIAR PARA O TREINADOR</button>
+      <button class="dialog-btn" id="closeReviewBtn">Fechar</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="updateDialog">
+  <div class="dialog-body">
+    <h3>Atualizar próxima semana</h3>
+    <p>Cole aqui o bloco JSON que o ChatGPT devolver no final da revisão semanal. Não precisa editar código.</p>
+
+    <textarea id="updateText" placeholder='Cole aqui o bloco da próxima semana...'></textarea>
+
+    <div class="dialog-actions">
+      <button class="dialog-btn primary" id="applyUpdateBtn">ATUALIZAR SEMANA</button>
+      <button class="dialog-btn" id="closeUpdateBtn">Fechar</button>
+    </div>
+
+    <div class="format-box">
+      Peça ao treinador para terminar a resposta com um bloco chamado <strong>APP_UPDATE</strong> contendo JSON.<br><br>
+      Exemplo mínimo:<br>
+      <code>{"week":2,"theme":"Progressão","purpose":"...","sessions":[...]}</code>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="historyDialog">
+  <div class="dialog-body">
+    <h3>Histórico</h3>
+    <p>Os dados abaixo ficam salvos no navegador deste aparelho.</p>
+    <div id="historyContainer" class="history-list"></div>
+    <div class="dialog-actions">
+      <button class="dialog-btn" id="closeHistoryBtn">Fechar</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="settingsDialog">
+  <div class="dialog-body">
+    <h3>Configurações</h3>
+
+    <label class="field">
+      <span>Foco principal do mês</span>
+      <input id="focusInput" type="text" maxlength="120" />
+    </label>
+
+    <label class="field">
+      <span>Foco secundário / observação</span>
+      <textarea id="focusSubInput" style="min-height:100px" maxlength="260"></textarea>
+    </label>
+
+    <div class="dialog-actions">
+      <button class="dialog-btn primary" id="saveFocusBtn">Salvar</button>
+      <button class="dialog-btn" id="exportBtn">Exportar backup</button>
+      <button class="dialog-btn" id="importBtn">Importar backup</button>
+      <input id="importFile" type="file" accept="application/json,.json" hidden />
+      <button class="dialog-btn danger" id="resetBtn">Zerar tudo</button>
+      <button class="dialog-btn" id="closeSettingsBtn">Fechar</button>
+    </div>
+
+    <div class="format-box">
+      <strong>Memória:</strong> checks, treinos, histórico e foco mensal são salvos automaticamente neste navegador via localStorage. Use o backup apenas como segurança.
+    </div>
+  </div>
+</dialog>
+
+<script>
+(() => {
+  "use strict";
+
+  const STORAGE_KEY = "fetter_hypertrophy_coach_personal_v2";
+
+  const baseExercises = {
+    A: [
+      {name:"Supino inclinado máquina", dose:"3 × 8–12", rir:"RIR 2 → 1", target:"Peitoral superior", why:"Entra cedo porque o peitoral superior é prioridade estética e queremos boa execução enquanto você está descansado."},
+      {name:"Elevação lateral no cabo", dose:"4 × 12–20", rir:"RIR 2 → 0", target:"Deltoide lateral", why:"Principal prioridade visual do bloco. O cabo facilita boa tensão e baixo custo sistêmico."},
+      {name:"Remada apoiada no peito", dose:"3 × 8–12", rir:"RIR 2 → 1", target:"Costas · espessura", why:"Mantém equilíbrio do tronco com boa estabilidade e menor fadiga desnecessária."},
+      {name:"Tríceps acima da cabeça", dose:"3 × 10–15", rir:"RIR 2 → 1", target:"Tríceps", why:"Complementa os movimentos de pressão e adiciona trabalho direto à cabeça longa."},
+      {name:"Rosca inclinada", dose:"3 × 8–12", rir:"RIR 2 → 1", target:"Bíceps", why:"Mantém estímulo direto de bíceps sem roubar prioridade do foco mensal."}
+    ],
+    B: [
+      {name:"Puxada alta neutra", dose:"3 × 8–12", rir:"RIR 2 → 1", target:"Dorsais · largura", why:"Padrão vertical estável para desenvolver dorsais."},
+      {name:"Remada baixa apoiada", dose:"3 × 8–12", rir:"RIR 2 → 1", target:"Costas · espessura", why:"Complementa a puxada vertical com maior participação da musculatura escapular."},
+      {name:"Crucifixo máquina", dose:"2 × 10–15", rir:"RIR 2 → 1", target:"Peitoral", why:"Adiciona trabalho de peitoral com baixo custo de tríceps."},
+      {name:"Crucifixo inverso", dose:"3 × 12–20", rir:"RIR 2 → 1", target:"Deltoide posterior", why:"Reforça a região posterior do ombro."},
+      {name:"Rosca Scott máquina", dose:"3 × 8–12", rir:"RIR 2 → 1", target:"Bíceps", why:"Alta estabilidade e progressão fácil de acompanhar pela percepção e repetições."},
+      {name:"Tríceps pressdown", dose:"3 × 10–15", rir:"RIR 2 → 0", target:"Tríceps", why:"Exercício simples e estável, apropriado para chegar mais perto da falha."}
+    ],
+    C: [
+      {name:"Press inclinado no cabo", dose:"3 × 10–15", rir:"RIR 2 → 1", target:"Peitoral superior", why:"Segundo estímulo semanal para a prioridade peitoral."},
+      {name:"Puxada unilateral no cabo", dose:"3 × 10–15", rir:"RIR 2 → 1", target:"Dorsais", why:"Permite ajustar trajetória e amplitude individualmente."},
+      {name:"Elevação lateral máquina", dose:"4 × 12–20", rir:"RIR 2 → 0", target:"Deltoide lateral", why:"Segundo estímulo direto da principal prioridade estética do bloco."},
+      {name:"Deltoide posterior no cabo", dose:"3 × 12–20", rir:"RIR 2 → 1", target:"Deltoide posterior", why:"Completa o trabalho de ombro sem depender apenas das remadas."},
+      {name:"Rosca martelo", dose:"2 × 10–15", rir:"RIR 2 → 1", target:"Braquial + braquiorradial", why:"Varia o padrão dos flexores do cotovelo."},
+      {name:"Tríceps unilateral acima da cabeça", dose:"2 × 10–15", rir:"RIR 2 → 1", target:"Tríceps", why:"Reforço direto com baixo custo sistêmico."}
+    ]
+  };
+
+  function session(id, day, name, focus, key){
+    return {
+      id, day, name, focus,
+      exercises: JSON.parse(JSON.stringify(baseExercises[key]))
+    };
+  }
+
+  const defaultPlan = [
+    {
+      week:1,
+      theme:"Calibração",
+      purpose:"Padronizar técnica, RIR e percepção dos exercícios.",
+      sessions:[
+        session("w1a","TER","Treino A","Peitoral superior + Ombros","A"),
+        session("w1b","QUI","Treino B","Costas + Braços","B"),
+        session("w1c","SÁB","Treino C","Upper estético","C")
+      ]
+    },
+    {
+      week:2,
+      theme:"Progressão de repetições",
+      purpose:"Manter a base e buscar pequenas progressões de desempenho sem perder técnica.",
+      sessions:[
+        session("w2a","TER","Treino A","Peitoral superior + Ombros","A"),
+        session("w2b","QUI","Treino B","Costas + Braços","B"),
+        session("w2c","SÁB","Treino C","Upper estético","C")
+      ]
+    },
+    {
+      week:3,
+      theme:"Consolidação",
+      purpose:"Sustentar a performance e a qualidade das séries próximas da falha.",
+      sessions:[
+        session("w3a","TER","Treino A","Peitoral superior + Ombros","A"),
+        session("w3b","QUI","Treino B","Costas + Braços","B"),
+        session("w3c","SÁB","Treino C","Upper estético","C")
+      ]
+    },
+    {
+      week:4,
+      theme:"Reavaliação",
+      purpose:"Rever fadiga, aderência, conforto e prioridades para o próximo bloco.",
+      sessions:[
+        session("w4a","TER","Treino A","Peitoral superior + Ombros","A"),
+        session("w4b","QUI","Treino B","Costas + Braços","B"),
+        session("w4c","SÁB","Treino C","Upper estético","C")
+      ]
+    }
+  ];
+
+  const defaultState = {
+    focusTitle:"Construir ombros mais largos + peitoral superior",
+    focusSub:"Prioridade secundária: dorsais e deltoide posterior. Braços seguem evoluindo sem roubar recursos do foco principal.",
+    plan:defaultPlan,
+    completed:{},
+    history:[],
+    xp:0,
+    createdAt:new Date().toISOString()
+  };
+
+  const $ = s => document.querySelector(s);
+  const $$ = s => [...document.querySelectorAll(s)];
+  const clone = obj => JSON.parse(JSON.stringify(obj));
+
+  function loadState(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return clone(defaultState);
+      const parsed = JSON.parse(raw);
+      return {
+        ...clone(defaultState),
+        ...parsed,
+        plan:Array.isArray(parsed.plan) ? parsed.plan : clone(defaultPlan),
+        completed:parsed.completed || {},
+        history:Array.isArray(parsed.history) ? parsed.history : []
+      };
+    }catch(e){
+      console.warn(e);
+      return clone(defaultState);
+    }
+  }
+
+  let state = loadState();
+  let selectedEffort = "na_medida";
+
+  function save(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function allSessions(){
+    return state.plan.flatMap(w => w.sessions.map(s => ({
+      ...s, week:w.week, theme:w.theme, purpose:w.purpose
+    })));
+  }
+
+  function doneCount(){
+    return Object.values(state.completed).filter(Boolean).length;
+  }
+
+  function currentSession(){
+    return allSessions().find(s => !state.completed[s.id]) || null;
+  }
+
+  function currentWeek(){
+    const s = currentSession();
+    return s ? s.week : 4;
+  }
+
+  function effortLabel(v){
+    if(v==="leve") return "Leve";
+    if(v==="pesado") return "Pesado";
+    return "Na medida";
+  }
+
+  function esc(v){
+    return String(v ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function toast(text){
+    const t=$("#toast");
+    t.textContent=text;
+    t.classList.add("show");
+    clearTimeout(toast.timer);
+    toast.timer=setTimeout(()=>t.classList.remove("show"),2600);
+  }
+
+  function renderHeader(){
+    const total=allSessions().length;
+    const done=doneCount();
+    const pct=total ? Math.round(done/total*100) : 0;
+
+    $("#focusTitle").textContent=state.focusTitle;
+    $("#focusSub").textContent=state.focusSub;
+    $("#progressText").textContent=`${done}/${total}`;
+    $("#progressBar").style.width=`${pct}%`;
+    $("#statDone").textContent=`${done}/${total}`;
+    $("#statPct").textContent=`${pct}%`;
+    $("#statStreak").textContent=`${done} 🔥`;
+    $("#statXp").textContent=`${state.xp} XP`;
+  }
+
+  function renderToday(){
+    const c=$("#todayContainer");
+    const s=currentSession();
+
+    if(!s){
+      c.innerHTML=`<div class="empty"><div style="font-size:32px;margin-bottom:7px">🏆</div><strong style="color:var(--text)">Bloco concluído.</strong><br>Hora de fazer a revisão final e montar o próximo mês.</div>`;
+      return;
+    }
+
+    const exercises=s.exercises.map((e,i)=>`
+      <div class="exercise">
+        <div class="eyebrow">${i+1}. ${esc(e.target)}</div>
+        <h3>${esc(e.name)}</h3>
+        <div class="exercise-meta">
+          <span class="mini">${esc(e.dose)}</span>
+          <span class="mini">${esc(e.rir)}</span>
+        </div>
+        <details>
+          <summary>Por que está aqui?</summary>
+          <p>${esc(e.why)}</p>
+        </details>
+      </div>
+    `).join("");
+
+    c.innerHTML=`
+      <article class="card">
+        <div class="today-head">
+          <div class="row">
+            <span class="pill accent">SEMANA ${s.week} · ${esc(s.theme)}</span>
+            <span class="pill">${esc(s.day)}</span>
+          </div>
+          <h2>${esc(s.name)} · ${esc(s.focus)}</h2>
+          <p>${esc(s.purpose)}</p>
+        </div>
+
+        ${exercises}
+
+        <div class="check-zone">
+          <div class="check-title">Como o treino pareceu no geral?</div>
+          <div class="effort-grid">
+            <button class="effort" data-effort="leve">LEVE</button>
+            <button class="effort selected" data-effort="na_medida">NA MEDIDA</button>
+            <button class="effort" data-effort="pesado">PESADO</button>
+          </div>
+
+          <div class="pain-line">
+            <span>Alguma dor articular/aguda relevante?</span>
+            <label><input id="painCheck" type="checkbox"> Sim</label>
+          </div>
+
+          <button class="complete" id="completeBtn">✓ CONCLUIR TREINO</button>
+        </div>
+      </article>
+    `;
+
+    $$(".effort").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        selectedEffort=btn.dataset.effort;
+        $$(".effort").forEach(b=>b.classList.remove("selected"));
+        btn.classList.add("selected");
+      });
+    });
+
+    $("#completeBtn").addEventListener("click",()=>completeWorkout(s));
+  }
+
+  function completeWorkout(s){
+    if(state.completed[s.id]) return;
+
+    const pain=Boolean($("#painCheck")?.checked);
+    const now=new Date().toISOString();
+
+    state.completed[s.id]=true;
+    state.xp += 100;
+    state.history.unshift({
+      id:s.id,
+      week:s.week,
+      name:s.name,
+      focus:s.focus,
+      effort:selectedEffort,
+      pain,
+      timestamp:now
+    });
+
+    save();
+    selectedEffort="na_medida";
+    renderAll();
+
+    toast(pain
+      ? "+100 XP. Treino salvo e dor marcada para revisão."
+      : `+100 XP. ${s.name} concluído.`);
+  }
+
+  function renderWeek(){
+    const wNum=currentWeek();
+    const week=state.plan.find(w=>w.week===wNum) || state.plan[state.plan.length-1];
+
+    $("#weekTitle").textContent=`Semana ${week.week} · ${week.theme}`;
+
+    $("#weekContainer").innerHTML=week.sessions.map(s=>{
+      const done=Boolean(state.completed[s.id]);
+      return `
+        <article class="card week-card ${done?"done":""}">
+          <div class="row">
+            <span class="eyebrow">${esc(s.day)}</span>
+            <span class="pill ${done?"done":""}">${done?"✓ Concluído":"Pendente"}</span>
+          </div>
+          <div class="session-name">${esc(s.name)}</div>
+          <div class="session-focus">${esc(s.focus)}</div>
+        </article>
+      `;
+    }).join("");
+  }
+
+  function renderMonth(){
+    $("#monthContainer").innerHTML=state.plan.map(w=>`
+      <section class="card month-week">
+        <div class="row">
+          <div>
+            <div class="eyebrow">Semana ${w.week}</div>
+            <h3>${esc(w.theme)}</h3>
+          </div>
+          <span class="pill">${w.sessions.filter(s=>state.completed[s.id]).length}/${w.sessions.length}</span>
+        </div>
+        <p>${esc(w.purpose)}</p>
+
+        ${w.sessions.map(s=>{
+          const done=Boolean(state.completed[s.id]);
+          return `
+            <div class="session-row ${done?"done":""}">
+              <div class="row">
+                <div>
+                  <div class="eyebrow">${esc(s.day)}</div>
+                  <div class="session-name">${esc(s.name)}</div>
+                  <div class="session-focus">${esc(s.focus)}</div>
+                </div>
+                <span class="pill ${done?"done":""}">${done?"✓":"○"}</span>
+              </div>
+            </div>
+          `;
+        }).join("")}
+      </section>
+    `).join("");
+  }
+
+  function weekHistory(weekNum){
+    return state.history.filter(h=>h.week===weekNum).slice().reverse();
+  }
+
+  function buildWeeklyReview(){
+    const wNum=Math.max(1, Math.min(4, currentWeek() === 1 && doneCount()===0 ? 1 : currentWeek()-1 + (state.plan.find(w=>w.week===currentWeek())?.sessions.every(s=>state.completed[s.id]) ? 1 : 0)));
+    // Prefer the latest week with at least one completed session.
+    const weeksWithHistory=[1,2,3,4].filter(w=>weekHistory(w).length);
+    const reviewWeek=weeksWithHistory.length ? weeksWithHistory[weeksWithHistory.length-1] : 1;
+
+    const week=state.plan.find(w=>w.week===reviewWeek);
+    const records=weekHistory(reviewWeek);
+    const done=records.length;
+    const planned=week?.sessions.length || 0;
+    const adherence=planned ? Math.round(done/planned*100) : 0;
+    const painCount=records.filter(r=>r.pain).length;
+    const effortCounts={
+      leve:records.filter(r=>r.effort==="leve").length,
+      na_medida:records.filter(r=>r.effort==="na_medida").length,
+      pesado:records.filter(r=>r.effort==="pesado").length
+    };
+
+    const sessionsText=records.length
+      ? records.map(r=>`- ${r.name} (${r.focus}): ${effortLabel(r.effort)} | Dor relevante: ${r.pain?"SIM":"não"}`).join("\n")
+      : "- Nenhum treino concluído ainda.";
+
+    const nextWeek=Math.min(4, reviewWeek+1);
+
+    return `FETTER HYPERTROPHY COACH — REVISÃO SEMANAL
+
+FOCO DO MÊS:
+${state.focusTitle}
+
+OBSERVAÇÃO DO BLOCO:
+${state.focusSub}
+
+SEMANA ANALISADA:
+${reviewWeek} de 4 — ${week?.theme || ""}
+
+OBJETIVO DA SEMANA:
+${week?.purpose || ""}
+
+ADERÊNCIA:
+${done}/${planned} treinos concluídos (${adherence}%)
+
+TREINOS:
+${sessionsText}
+
+PERCEPÇÃO GERAL:
+Leves: ${effortCounts.leve}
+Na medida: ${effortCounts.na_medida}
+Pesados: ${effortCounts.pesado}
+Sessões com dor relevante: ${painCount}
+
+PROGRESSO DO MÊS:
+${doneCount()}/${allSessions().length} treinos concluídos
+XP atual: ${state.xp}
+
+TAREFA DO TREINADOR:
+1. Analise a semana considerando meu histórico desta conversa/projeto.
+2. Diga o que melhorou, o que deve permanecer e o que merece atenção.
+3. Programe detalhadamente a SEMANA ${nextWeek}.
+4. Explique o motivo de qualquer alteração de exercício, séries, repetições ou RIR.
+5. Não altere o programa apenas por variedade.
+6. Considere meu foco estético do mês como prioridade.
+7. No final da resposta, gere obrigatoriamente um bloco chamado APP_UPDATE, em JSON puro, seguindo exatamente este formato:
+
+APP_UPDATE
+{
+  "week": ${nextWeek},
+  "theme": "nome da fase da semana",
+  "purpose": "objetivo da semana",
+  "focusTitle": "${state.focusTitle.replaceAll('"','\\"')}",
+  "focusSub": "${state.focusSub.replaceAll('"','\\"')}",
+  "sessions": [
+    {
+      "day": "TER",
+      "name": "Treino A",
+      "focus": "foco do treino",
+      "exercises": [
+        {
+          "name": "nome do exercício",
+          "dose": "3 × 8–12",
+          "rir": "RIR 2 → 1",
+          "target": "músculo principal",
+          "why": "motivo curto de este exercício estar aqui"
+        }
+      ]
+    }
+  ]
+}
+
+IMPORTANTE:
+- Retorne 3 sessões na semana.
+- O JSON precisa ser válido.
+- Não use comentários dentro do JSON.
+- Não coloque kg/carga de máquina.
+- A progressão deve ser orientada por repetições, RIR, execução, esforço percebido e resposta semanal.`;
+  }
+
+  function renderCoachStatus(){
+    const w=currentWeek();
+    const week=state.plan.find(x=>x.week===w);
+    const doneThisWeek=week?.sessions.filter(s=>state.completed[s.id]).length || 0;
+    const total=week?.sessions.length || 0;
+    const reviewReady=doneThisWeek===total && total>0;
+
+    $("#coachStatus").innerHTML=reviewReady
+      ? `<strong>Semana ${w} concluída.</strong><br>Agora faz sentido gerar a revisão semanal e mandar para o treinador.`
+      : `<strong>Semana ${w}:</strong> ${doneThisWeek}/${total} treinos concluídos.<br>Durante a semana, não precisa fazer mais nada além dos checks.`;
+  }
+
+  function renderHistory(){
+    const c=$("#historyContainer");
+
+    if(!state.history.length){
+      c.innerHTML=`<div class="empty">Nenhum treino registrado ainda.</div>`;
+      return;
+    }
+
+    c.innerHTML=state.history.map((h,index)=>{
+      const d=new Date(h.timestamp);
+      const formatted=new Intl.DateTimeFormat("pt-BR",{
+        day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"
+      }).format(d);
+
+      return `
+        <article class="history-card">
+          <div class="row">
+            <strong>${esc(h.name)} · S${h.week}</strong>
+            <span class="pill done">+100 XP</span>
+          </div>
+          <p>${esc(h.focus)}</p>
+          <p><b>Percepção:</b> ${esc(effortLabel(h.effort))}</p>
+          <p><b>Dor:</b> ${h.pain?"Sim":"Não"} · ${formatted}</p>
+          ${index===0 ? `<button class="undo-btn" data-undo="${esc(h.id)}">DESFAZER ÚLTIMO CHECK</button>` : ""}
+        </article>
+      `;
+    }).join("");
+
+    const undo=$("#historyContainer [data-undo]");
+    if(undo){
+      undo.addEventListener("click",()=>undoLast());
+    }
+  }
+
+  function undoLast(){
+    const last=state.history[0];
+    if(!last) return;
+    if(!confirm(`Desfazer o check de ${last.name}?`)) return;
+
+    delete state.completed[last.id];
+    state.history.shift();
+    state.xp=Math.max(0,state.xp-100);
+    save();
+    renderAll();
+    toast("Último check desfeito.");
+  }
+
+  function showTab(name){
+    $$(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));
+    $$(".panel").forEach(p=>p.classList.toggle("active",p.id===`panel-${name}`));
+  }
+
+  function extractJson(text){
+    let t=text.trim();
+
+    const appIndex=t.indexOf("APP_UPDATE");
+    if(appIndex>=0){
+      t=t.slice(appIndex+"APP_UPDATE".length).trim();
+    }
+
+    const fenced=t.match(/```(?:json)?\s*([\s\S]*?)```/i);
+    if(fenced) t=fenced[1].trim();
+
+    const first=t.indexOf("{");
+    const last=t.lastIndexOf("}");
+    if(first<0 || last<0 || last<=first) throw new Error("JSON não encontrado");
+
+    return JSON.parse(t.slice(first,last+1));
+  }
+
+  function normalizeWeekUpdate(data){
+    const week=Number(data.week);
+    if(!Number.isInteger(week) || week<1 || week>4){
+      throw new Error("Semana inválida");
+    }
+    if(!Array.isArray(data.sessions) || data.sessions.length<1){
+      throw new Error("Nenhuma sessão encontrada");
+    }
+
+    const sessions=data.sessions.slice(0,4).map((s,index)=>{
+      if(!s || !Array.isArray(s.exercises) || !s.exercises.length){
+        throw new Error(`Treino ${index+1} sem exercícios`);
+      }
+
+      return {
+        id:`w${week}${String.fromCharCode(97+index)}`,
+        day:String(s.day || ["TER","QUI","SÁB","DOM"][index] || "DIA"),
+        name:String(s.name || `Treino ${String.fromCharCode(65+index)}`),
+        focus:String(s.focus || "Upper body"),
+        exercises:s.exercises.slice(0,12).map(e=>({
+          name:String(e.name || "Exercício"),
+          dose:String(e.dose || "3 × 8–12"),
+          rir:String(e.rir || "RIR 2 → 1"),
+          target:String(e.target || "Músculo alvo"),
+          why:String(e.why || "Selecionado para atender ao objetivo da semana.")
+        }))
+      };
+    });
+
+    return {
+      week,
+      theme:String(data.theme || `Semana ${week}`),
+      purpose:String(data.purpose || "Dar continuidade ao bloco."),
+      sessions,
+      focusTitle:typeof data.focusTitle==="string" ? data.focusTitle : null,
+      focusSub:typeof data.focusSub==="string" ? data.focusSub : null
+    };
+  }
+
+  function applyWeekUpdate(text){
+    const parsed=extractJson(text);
+    const update=normalizeWeekUpdate(parsed);
+    const index=state.plan.findIndex(w=>w.week===update.week);
+
+    if(index<0) throw new Error("Semana não encontrada");
+
+    // Preserve already completed sessions for that week only if IDs still match;
+    // normally this is used for a future week.
+    state.plan[index]={
+      week:update.week,
+      theme:update.theme,
+      purpose:update.purpose,
+      sessions:update.sessions
+    };
+
+    if(update.focusTitle) state.focusTitle=update.focusTitle.slice(0,120);
+    if(update.focusSub) state.focusSub=update.focusSub.slice(0,260);
+
+    save();
+    renderAll();
+  }
+
+  async function copyText(text){
+    try{
+      if(navigator.clipboard && window.isSecureContext){
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    }catch(e){}
+
+    const ta=document.createElement("textarea");
+    ta.value=text;
+    ta.style.position="fixed";
+    ta.style.opacity="0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+
+    let ok=false;
+    try{ ok=document.execCommand("copy"); }catch(e){}
+    ta.remove();
+    return ok;
+  }
+
+  function renderAll(){
+    renderHeader();
+    renderToday();
+    renderWeek();
+    renderMonth();
+    renderCoachStatus();
+    renderHistory();
+  }
+
+  // Tabs
+  $$(".tab").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
+
+  // Review
+  $("#reviewBtn").addEventListener("click",()=>{
+    $("#reviewText").value=buildWeeklyReview();
+    $("#reviewDialog").showModal();
+  });
+
+  $("#copyReviewBtn").addEventListener("click",async()=>{
+    const ok=await copyText($("#reviewText").value);
+    toast(ok ? "Resumo copiado. Agora é só colar no treinador." : "Selecione o texto e copie manualmente.");
+  });
+
+  $("#closeReviewBtn").addEventListener("click",()=>$("#reviewDialog").close());
+
+  // Update week
+  $("#updateWeekBtn").addEventListener("click",()=>{
+    $("#updateText").value="";
+    $("#updateDialog").showModal();
+  });
+
+  $("#applyUpdateBtn").addEventListener("click",()=>{
+    try{
+      const text=$("#updateText").value.trim();
+      if(!text) throw new Error("Cole primeiro a resposta do treinador.");
+      applyWeekUpdate(text);
+      $("#updateDialog").close();
+      toast("Próxima semana atualizada.");
+    }catch(e){
+      toast(`Não consegui atualizar: ${e.message}`);
+    }
+  });
+
+  $("#closeUpdateBtn").addEventListener("click",()=>$("#updateDialog").close());
+
+  // History
+  $("#historyBtn").addEventListener("click",()=>{
+    renderHistory();
+    $("#historyDialog").showModal();
+  });
+  $("#closeHistoryBtn").addEventListener("click",()=>$("#historyDialog").close());
+
+  // Settings
+  $("#settingsBtn").addEventListener("click",()=>{
+    $("#focusInput").value=state.focusTitle;
+    $("#focusSubInput").value=state.focusSub;
+    $("#settingsDialog").showModal();
+  });
+
+  $("#saveFocusBtn").addEventListener("click",()=>{
+    const t=$("#focusInput").value.trim();
+    const s=$("#focusSubInput").value.trim();
+    if(t) state.focusTitle=t.slice(0,120);
+    state.focusSub=s.slice(0,260);
+    save();
+    renderAll();
+    $("#settingsDialog").close();
+    toast("Foco do mês atualizado.");
+  });
+
+  $("#exportBtn").addEventListener("click",()=>{
+    const payload={
+      app:"Fetter Hypertrophy Coach",
+      version:2,
+      exportedAt:new Date().toISOString(),
+      state
+    };
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;
+    a.download=`fetter-hypertrophy-backup-${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    toast("Backup exportado.");
+  });
+
+  $("#importBtn").addEventListener("click",()=>$("#importFile").click());
+
+  $("#importFile").addEventListener("change",async e=>{
+    const f=e.target.files?.[0];
+    if(!f) return;
+
+    try{
+      const data=JSON.parse(await f.text());
+      const incoming=data.state || data;
+      if(!incoming || typeof incoming!=="object") throw new Error();
+
+      state={
+        ...clone(defaultState),
+        ...incoming,
+        plan:Array.isArray(incoming.plan) ? incoming.plan : clone(defaultPlan),
+        completed:incoming.completed || {},
+        history:Array.isArray(incoming.history) ? incoming.history : []
+      };
+
+      save();
+      renderAll();
+      $("#settingsDialog").close();
+      toast("Backup importado.");
+    }catch(err){
+      toast("Backup inválido.");
+    }finally{
+      e.target.value="";
+    }
+  });
+
+  $("#resetBtn").addEventListener("click",()=>{
+    if(!confirm("Zerar todos os treinos, histórico, XP e alterações do plano?")) return;
+    state=clone(defaultState);
+    state.createdAt=new Date().toISOString();
+    save();
+    renderAll();
+    $("#settingsDialog").close();
+    toast("Aplicativo zerado.");
+  });
+
+  $("#closeSettingsBtn").addEventListener("click",()=>$("#settingsDialog").close());
+
+  renderAll();
+})();
+</script>
+</body>
+</html>
