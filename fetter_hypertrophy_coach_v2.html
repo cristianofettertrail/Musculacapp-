@@ -15,180 +15,20 @@ body{margin:0;background:#0b0f14;color:#f4f7fb;font-family:system-ui,-apple-syst
 <div id="boot"><div><strong>Fetter Coach</strong><small>Carregando treino...</small></div></div>
 <script>
 (async()=>{
-const BASE_URL="https://raw.githubusercontent.com/cristianofettertrail/Musculacapp-/1eeb6d47ce7f66a1f9c6e22127103ecfa852af48/fetter_hypertrophy_coach_v2.html";
-
-const EXTRA_CSS=String.raw`
-<style>
-.exercise-tools-v3{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
-.exercise-tools-v3 .v3-wide{grid-column:1/-1}
-.v3-btn,.v3-link{min-height:42px;border:1px solid var(--border);border-radius:11px;background:var(--panel);color:var(--text);display:flex;align-items:center;justify-content:center;text-align:center;padding:7px 8px;font-size:10px;font-weight:900;text-decoration:none;cursor:pointer}
-.v3-link{color:var(--accent);border-color:rgba(85,229,157,.30)}
-.v3-muscle{margin-top:9px;border:1px solid var(--border);border-radius:13px;background:var(--panel);padding:10px}
-.v3-muscle summary{color:var(--text);display:flex;align-items:center;justify-content:space-between;gap:8px}
-.v3-muscle-grid{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:center;margin-top:9px}
-.v3-muscle-grid svg{width:118px;height:auto;display:block;border-radius:12px;background:#0d141d;border:1px solid var(--border)}
-.v3-muscle-info{min-width:0;color:var(--muted);font-size:10px;line-height:1.45}
-.v3-muscle-info strong{color:var(--text)}
-.v3-legend{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px;font-size:9px;color:var(--muted)}
-.v3-dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:4px}
-.v3-sub{display:none;margin-top:9px;border:1px solid rgba(247,201,107,.25);border-radius:13px;background:rgba(247,201,107,.055);padding:11px}
-.v3-sub.open{display:block}
-.v3-pattern{color:#f7c96b;font-size:10px;font-weight:900;margin-bottom:7px}
-.v3-note{color:var(--muted);font-size:10px;line-height:1.45;margin-bottom:7px}
-.v3-option{display:grid;grid-template-columns:24px 1fr auto;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--border)}
-.v3-option:first-of-type{border-top:0}
-.v3-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--card2);color:var(--accent);font-size:10px;font-weight:900}
-.v3-name{font-size:11px;font-weight:800}
-.v3-video{min-height:34px;border:1px solid var(--border);border-radius:9px;display:flex;align-items:center;padding:0 8px;color:var(--accent);text-decoration:none;font-size:9px;font-weight:900;white-space:nowrap}
-.v3-pattern-chip{border-color:rgba(247,201,107,.25)!important;color:#f7c96b!important}
-@media(max-width:460px){.v3-muscle-grid{grid-template-columns:100px 1fr}.v3-muscle-grid svg{width:100px}}
-</style>`;
-
-function enhancer(){
-  "use strict";
-
-  const PATTERNS={
-    pressao_inclinada:{label:"Pressão inclinada / ênfase clavicular",alts:["Supino inclinado com halteres","Supino inclinado no Smith","Press inclinado no cabo"]},
-    pressao_horizontal:{label:"Pressão horizontal",alts:["Supino reto com halteres","Supino reto no Smith","Chest press máquina"]},
-    abducao_ombro:{label:"Abdução do ombro — deltoide lateral",alts:["Elevação lateral com halteres","Elevação lateral unilateral no cabo","Elevação lateral máquina"]},
-    remada_horizontal:{label:"Puxada horizontal / remada",alts:["Remada baixa no cabo","Remada máquina com apoio no peito","Remada unilateral com halter apoiado"]},
-    puxada_vertical:{label:"Puxada vertical",alts:["Puxada alta pronada","Puxada alta neutra","Barra fixa assistida"]},
-    aducao_horizontal:{label:"Adução horizontal — peitoral",alts:["Crucifixo no cabo","Crucifixo com halteres","Peck deck / crucifixo máquina"]},
-    posterior_ombro:{label:"Abdução horizontal — deltoide posterior",alts:["Crucifixo inverso máquina","Face pull","Elevação posterior com halteres apoiado"]},
-    triceps_overhead:{label:"Extensão do cotovelo com braço elevado",alts:["Tríceps francês com halter","Extensão acima da cabeça no cabo","Tríceps unilateral acima da cabeça"]},
-    triceps_baixo:{label:"Extensão do cotovelo junto ao tronco",alts:["Tríceps corda","Tríceps barra reta","Tríceps unilateral no cabo"]},
-    flexao_cotovelo:{label:"Flexão do cotovelo — pegada supinada",alts:["Rosca Scott","Rosca inclinada com halteres","Rosca no cabo"]},
-    flexao_neutra:{label:"Flexão do cotovelo — pegada neutra",alts:["Rosca martelo com halteres","Rosca martelo no cabo com corda","Rosca martelo unilateral"]},
-    generico:{label:"Mesmo músculo-alvo e função principal",alts:["Variação com halteres","Variação no cabo","Variação em máquina estável"]}
-  };
-
-  function norm(v){
-    return String(v||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+  const PREVIOUS_VERSION="https://raw.githubusercontent.com/cristianofettertrail/Musculacapp-/460cb8772725e6e7c516acaa5f4c0b706066c281/fetter_hypertrophy_coach_v2.html";
+  try{
+    const r=await fetch(PREVIOUS_VERSION,{cache:"no-store"});
+    if(!r.ok) throw new Error("Falha ao carregar base");
+    let html=await r.text();
+    const scripts='<script src="./volume-core-v4.js?v=4"></'+'script><script src="./volume-ui-v4.js?v=4"></'+'script>';
+    html=html.replace("</body>",scripts+"</body>");
+    document.open();
+    document.write(html);
+    document.close();
+  }catch(err){
+    document.getElementById("boot").innerHTML="<div><strong>Não consegui carregar o app.</strong><small>Atualize a página. Se persistir, abra o GitHub Pages novamente.</small></div>";
+    console.error(err);
   }
-
-  function pattern(name,target){
-    const t=norm(name+" "+target);
-    if(t.includes("elevacao lateral"))return "abducao_ombro";
-    if(t.includes("crucifixo inverso")||t.includes("deltoide posterior")||t.includes("face pull"))return "posterior_ombro";
-    if(t.includes("remada"))return "remada_horizontal";
-    if(t.includes("puxada")||t.includes("barra fixa"))return "puxada_vertical";
-    if(t.includes("crucifixo")||t.includes("peck deck"))return "aducao_horizontal";
-    if(t.includes("supino inclinado")||t.includes("press inclinado"))return "pressao_inclinada";
-    if(t.includes("supino")||t.includes("chest press"))return "pressao_horizontal";
-    if((t.includes("triceps")||t.includes("extensao"))&&(t.includes("acima")||t.includes("frances")||t.includes("overhead")))return "triceps_overhead";
-    if(t.includes("pressdown")||(t.includes("triceps")&&(t.includes("corda")||t.includes("barra")||t.includes("unilateral"))))return "triceps_baixo";
-    if(t.includes("rosca martelo")||t.includes("braquiorradial")||t.includes("braquial"))return "flexao_neutra";
-    if(t.includes("rosca")||t.includes("biceps"))return "flexao_cotovelo";
-    return "generico";
-  }
-
-  function youtube(name){
-    return "https://www.youtube.com/results?search_query="+encodeURIComponent(name+" execução correta musculação");
-  }
-
-  function profile(name,target){
-    const t=norm(name+" "+target);
-    if(t.includes("peitoral superior")||t.includes("inclinado"))return {p:["chestUpper"],s:["frontDelt","triceps"],pt:"Peitoral maior — porção clavicular",st:"Deltoide anterior e tríceps"};
-    if(t.includes("peitoral")||t.includes("crucifixo"))return {p:["chest"],s:["frontDelt"],pt:"Peitoral maior",st:"Deltoide anterior"};
-    if(t.includes("deltoide lateral")||t.includes("elevacao lateral"))return {p:["sideDelt"],s:["upperTrap"],pt:"Deltoide lateral",st:"Trapézio superior como assistente/estabilizador"};
-    if(t.includes("deltoide posterior")||t.includes("crucifixo inverso"))return {p:["rearDelt"],s:["upperBack"],pt:"Deltoide posterior",st:"Romboides e trapézio médio"};
-    if(t.includes("costas")||t.includes("remada"))return {p:["upperBack","lats"],s:["rearDelt","biceps"],pt:"Dorsais + musculatura escapular",st:"Deltoide posterior e bíceps"};
-    if(t.includes("dorsais")||t.includes("puxada"))return {p:["lats"],s:["biceps","rearDelt"],pt:"Latíssimo do dorso",st:"Bíceps e deltoide posterior"};
-    if(t.includes("triceps"))return {p:["triceps"],s:["forearm"],pt:"Tríceps braquial",st:"Antebraço/estabilizadores"};
-    if(t.includes("biceps")||t.includes("rosca"))return {p:["biceps"],s:["forearm"],pt:"Bíceps/braquial",st:"Braquiorradial e antebraço"};
-    return {p:["upperBack"],s:[],pt:target||"Músculo-alvo",st:"Sinergistas variam conforme a execução"};
-  }
-
-  function svg(name,target){
-    const m=profile(name,target),has=(r,k)=>m[k].includes(r),fill=r=>has(r,"p")?"#55e59d":has(r,"s")?"#6b8298":"#25313f";
-    return `<svg viewBox="0 0 240 172" role="img" aria-label="Mapa muscular ilustrativo">
-      <text x="60" y="15" text-anchor="middle" fill="#9aa7b8" font-size="9">FRENTE</text><text x="180" y="15" text-anchor="middle" fill="#9aa7b8" font-size="9">COSTAS</text>
-      <circle cx="60" cy="31" r="11" fill="#25313f"/><rect x="43" y="44" width="34" height="52" rx="13" fill="#25313f"/>
-      <circle cx="39" cy="51" r="9" fill="${fill("sideDelt")}"/><circle cx="81" cy="51" r="9" fill="${fill("sideDelt")}"/>
-      <path d="M47 48 Q60 42 73 48 L72 64 Q60 70 48 64Z" fill="${fill("chestUpper")}"/><path d="M47 58 Q60 64 73 58 L72 77 Q60 82 48 77Z" fill="${fill("chest")}"/>
-      <rect x="28" y="58" width="10" height="35" rx="5" fill="${fill("biceps")}"/><rect x="82" y="58" width="10" height="35" rx="5" fill="${fill("biceps")}"/>
-      <rect x="27" y="91" width="10" height="30" rx="5" fill="${fill("forearm")}"/><rect x="83" y="91" width="10" height="30" rx="5" fill="${fill("forearm")}"/>
-      <path d="M45 46 Q60 37 75 46 L72 55 Q60 49 48 55Z" fill="${fill("frontDelt")}" opacity=".9"/><rect x="49" y="96" width="10" height="50" rx="5" fill="#25313f"/><rect x="61" y="96" width="10" height="50" rx="5" fill="#25313f"/>
-      <circle cx="180" cy="31" r="11" fill="#25313f"/><rect x="163" y="44" width="34" height="52" rx="13" fill="#25313f"/>
-      <circle cx="159" cy="51" r="9" fill="${fill("rearDelt")}"/><circle cx="201" cy="51" r="9" fill="${fill("rearDelt")}"/>
-      <path d="M165 46 Q180 40 195 46 L192 62 Q180 68 168 62Z" fill="${fill("upperTrap")}"/><path d="M166 55 Q180 48 194 55 L191 75 Q180 82 169 75Z" fill="${fill("upperBack")}"/>
-      <path d="M165 66 Q172 72 176 92 L165 91Z" fill="${fill("lats")}"/><path d="M195 66 Q188 72 184 92 L195 91Z" fill="${fill("lats")}"/>
-      <rect x="148" y="58" width="10" height="35" rx="5" fill="${fill("triceps")}"/><rect x="202" y="58" width="10" height="35" rx="5" fill="${fill("triceps")}"/>
-      <rect x="147" y="91" width="10" height="30" rx="5" fill="${fill("forearm")}"/><rect x="203" y="91" width="10" height="30" rx="5" fill="${fill("forearm")}"/>
-      <rect x="169" y="96" width="10" height="50" rx="5" fill="#25313f"/><rect x="181" y="96" width="10" height="50" rx="5" fill="#25313f"/>
-    </svg>`;
-  }
-
-  function enhanceExercise(ex,i){
-    if(ex.dataset.v3==="1")return;
-    const h=ex.querySelector("h3"),eye=ex.querySelector(".eyebrow"),meta=ex.querySelector(".exercise-meta");
-    if(!h||!eye||!meta)return;
-    ex.dataset.v3="1";
-
-    const name=h.textContent.trim();
-    const target=eye.textContent.replace(/^\s*\d+\.\s*/,"").trim();
-    const key=pattern(name,target),p=PATTERNS[key]||PATTERNS.generico,m=profile(name,target);
-    let alts=p.alts.filter(x=>norm(x)!==norm(name));
-    if(alts.length<3)alts=[...alts,...p.alts].slice(0,3);
-
-    const chip=document.createElement("span");
-    chip.className="mini v3-pattern-chip";
-    chip.textContent="Padrão: "+p.label;
-    meta.appendChild(chip);
-
-    const muscle=document.createElement("details");
-    muscle.className="v3-muscle";
-    muscle.innerHTML=`<summary>💪 Ver musculatura utilizada <span>▾</span></summary>
-      <div class="v3-muscle-grid">${svg(name,target)}
-        <div class="v3-muscle-info"><div><strong>Principal:</strong><br>${m.pt}</div><div style="margin-top:7px"><strong>Secundários:</strong><br>${m.st}</div>
-        <div class="v3-legend"><span><i class="v3-dot" style="background:#55e59d"></i>principal</span><span><i class="v3-dot" style="background:#6b8298"></i>secundário</span></div>
-        <div style="margin-top:7px">Mapa esquemático para orientação rápida; a participação real varia com técnica e anatomia.</div></div></div>`;
-    const firstDetails=ex.querySelector("details");
-    if(firstDetails)firstDetails.before(muscle);else ex.appendChild(muscle);
-
-    const tools=document.createElement("div");
-    tools.className="exercise-tools-v3";
-    tools.innerHTML=`<a class="v3-link" href="${youtube(name)}" target="_blank" rel="noopener">▶ VER EXECUÇÃO</a>
-      <button type="button" class="v3-btn v3-wide">🔄 MÁQUINA NÃO DISPONÍVEL</button>`;
-    ex.appendChild(tools);
-
-    const sub=document.createElement("div");
-    sub.className="v3-sub";
-    sub.innerHTML=`<div class="v3-pattern">PADRÃO PRESERVADO: ${p.label}</div>
-      <div class="v3-note">As substituições mantêm a função principal do exercício e trocam o equipamento/variação.</div>
-      ${alts.slice(0,3).map((a,n)=>`<div class="v3-option"><span class="v3-num">${n+1}</span><span class="v3-name">${a}</span><a class="v3-video" href="${youtube(a)}" target="_blank" rel="noopener">▶ vídeo</a></div>`).join("")}`;
-    ex.appendChild(sub);
-
-    tools.querySelector("button").addEventListener("click",ev=>{
-      const open=sub.classList.toggle("open");
-      ev.currentTarget.textContent=open?"✕ FECHAR SUBSTITUIÇÕES":"🔄 MÁQUINA NÃO DISPONÍVEL";
-    });
-  }
-
-  function enhanceAll(){
-    document.querySelectorAll("#todayContainer .exercise").forEach(enhanceExercise);
-  }
-
-  enhanceAll();
-  const target=document.querySelector("#todayContainer");
-  if(target){
-    new MutationObserver(()=>requestAnimationFrame(enhanceAll)).observe(target,{childList:true,subtree:true});
-  }
-}
-
-try{
-  const r=await fetch(BASE_URL,{cache:"no-store"});
-  if(!r.ok)throw new Error("Falha ao carregar base");
-  let base=await r.text();
-  const extraScript="<scr"+"ipt>("+enhancer.toString()+")();</scr"+"ipt>";
-  base=base.replace("</head>",EXTRA_CSS+"</head>").replace("</body>",extraScript+"</body>");
-  document.open();
-  document.write(base);
-  document.close();
-}catch(err){
-  document.getElementById("boot").innerHTML="<div><strong>Não consegui carregar o app.</strong><small>Atualize a página. Se persistir, abra o GitHub Pages novamente.</small></div>";
-  console.error(err);
-}
 })();
 </script>
 </body>
