@@ -15,18 +15,23 @@ body{margin:0;background:#0b0f14;color:#f4f7fb;font-family:system-ui,-apple-syst
 <div id="boot"><div><strong>Fetter Coach</strong><small>Carregando treino...</small></div></div>
 <script>
 (async()=>{
-  const PREVIOUS_VERSION="https://raw.githubusercontent.com/cristianofettertrail/Musculacapp-/460cb8772725e6e7c516acaa5f4c0b706066c281/fetter_hypertrophy_coach_v2.html";
+  const V3="https://raw.githubusercontent.com/cristianofettertrail/Musculacapp-/460cb8772725e6e7c516acaa5f4c0b706066c281/fetter_hypertrophy_coach_v2.html";
   try{
-    const r=await fetch(PREVIOUS_VERSION,{cache:"no-store"});
-    if(!r.ok) throw new Error("Falha ao carregar base");
+    const r=await fetch(V3,{cache:"no-store"});
+    if(!r.ok) throw new Error("Falha ao carregar app");
     let html=await r.text();
-    const scripts='<script src="./volume-core-v4.js?v=4"></'+'script><script src="./volume-ui-v4.js?v=4"></'+'script>';
-    html=html.replace("</body>",scripts+"</body>");
+
+    const needle='base=base.replace("</head>",EXTRA_CSS+"</head>").replace("</body>",extraScript+"</body>");';
+    const replacement='base=base.replace("</head>",EXTRA_CSS+"</head>").replace("</body>",extraScript+"<script src=\\"./volume-core-v4.js?v=5\\"></"+"script><script src=\\"./volume-ui-v4.js?v=5\\"></"+"script></body>");';
+
+    if(!html.includes(needle)) throw new Error("Ponto de integração não encontrado");
+    html=html.replace(needle,replacement);
+
     document.open();
     document.write(html);
     document.close();
   }catch(err){
-    document.getElementById("boot").innerHTML="<div><strong>Não consegui carregar o app.</strong><small>Atualize a página. Se persistir, abra o GitHub Pages novamente.</small></div>";
+    document.getElementById("boot").innerHTML="<div><strong>Não consegui carregar o app.</strong><small>Atualize a página. Se persistir, feche e abra novamente pelo atalho.</small></div>";
     console.error(err);
   }
 })();
