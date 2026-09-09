@@ -22,7 +22,7 @@ body{margin:0;background:#0b0f14;color:#f4f7fb;font-family:system-ui,-apple-syst
     let html=await r.text();
 
     const needle='base=base.replace("</head>",EXTRA_CSS+"</head>").replace("</body>",extraScript+"</body>");';
-    const replacement='base=base.replace("</head>",EXTRA_CSS+"</head>").replace("</body>",extraScript+"<script src=\\"./volume-core-v4.js?v=5\\"></"+"script><script src=\\"./volume-ui-v4.js?v=5\\"></"+"script></body>");';
+    const replacement='base=base.replace("</head>",EXTRA_CSS+"</head>").replace("</body>",extraScript+"<script src=\\"./volume-v5.js?v=5\\"></"+"script></body>");';
 
     if(!html.includes(needle)) throw new Error("Ponto de integração não encontrado");
     html=html.replace(needle,replacement);
