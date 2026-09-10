@@ -6,33 +6,47 @@
 <meta name="theme-color" content="#0b0f14">
 <title>Fetter Hypertrophy Coach</title>
 <style>
-body{margin:0;background:#0b0f14;color:#f4f7fb;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
-#boot{min-height:70vh;display:grid;place-items:center;padding:24px;text-align:center}
-#boot small{display:block;color:#9aa7b8;margin-top:8px}
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(180deg,#0b0f14,#0e141d);color:#f4f7fb;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}#boot{min-height:75vh;display:grid;place-items:center;padding:28px;text-align:center}.box{max-width:430px}.logo{font-size:22px;font-weight:900}.status{margin-top:9px;color:#9aa7b8;font-size:13px;line-height:1.5}.bar{width:220px;max-width:70vw;height:9px;margin:18px auto 0;border-radius:999px;background:#26313f;overflow:hidden}.bar i{display:block;width:45%;height:100%;border-radius:999px;background:#55e59d;animation:move 1s ease-in-out infinite alternate}@keyframes move{to{transform:translateX(120%)}}button{margin-top:16px;min-height:44px;border:0;border-radius:12px;background:#55e59d;color:#07110c;padding:0 16px;font-weight:900;display:none}
 </style>
 </head>
 <body>
-<div id="boot"><div><strong>Fetter Coach</strong><small>Carregando treino...</small></div></div>
+<div id="boot"><div class="box"><div class="logo">Fetter Coach</div><div class="status" id="status">Carregando a versão integrada...</div><div class="bar" id="bar"><i></i></div><button id="retry" type="button">TENTAR NOVAMENTE</button></div></div>
 <script>
-(async()=>{
-  const V3="https://raw.githubusercontent.com/cristianofettertrail/Musculacapp-/460cb8772725e6e7c516acaa5f4c0b706066c281/fetter_hypertrophy_coach_v2.html";
+(async function boot(){
+  const status=document.getElementById('status');
+  const retry=document.getElementById('retry');
+  const bar=document.getElementById('bar');
+  retry.onclick=()=>location.reload();
   try{
-    const r=await fetch(V3,{cache:"no-store"});
-    if(!r.ok) throw new Error("Falha ao carregar app");
-    let html=await r.text();
+    if(typeof DecompressionStream==='undefined') throw new Error('Seu Safari precisa estar atualizado para carregar esta versão.');
+    const paths=Array.from({length:5},(_,i)=>`./app-v6-package/chunk-${String(i).padStart(2,'0')}.b64?v=6.1`);
+    const responses=await Promise.all(paths.map(path=>fetch(path,{cache:'no-store'})));
+    if(responses.some(r=>!r.ok)) throw new Error('Não foi possível carregar todos os arquivos do aplicativo.');
+    const chunks=await Promise.all(responses.map(r=>r.text()));
+    const b64=chunks.map(x=>x.trim()).join('');
+    if(b64.length!==39732) throw new Error('Pacote incompleto. Atualize a página.');
 
-    const needle='base=base.replace("</head>",EXTRA_CSS+"</head>").replace("</body>",extraScript+"</body>");';
-    const replacement='base=base.replace("</head>",EXTRA_CSS+"</head>").replace("</body>",extraScript+"<script src=\\"./volume-v5.js?v=5\\"></"+"script></body>");';
+    const binary=atob(b64);
+    const compressed=new Uint8Array(binary.length);
+    for(let i=0;i<binary.length;i++) compressed[i]=binary.charCodeAt(i);
+    const decompressedStream=new Blob([compressed]).stream().pipeThrough(new DecompressionStream('gzip'));
+    const buffer=await new Response(decompressedStream).arrayBuffer();
+    const html=new TextDecoder('utf-8').decode(buffer);
 
-    if(!html.includes(needle)) throw new Error("Ponto de integração não encontrado");
-    html=html.replace(needle,replacement);
+    if(crypto && crypto.subtle){
+      const hashBuffer=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(html));
+      const hash=Array.from(new Uint8Array(hashBuffer)).map(b=>b.toString(16).padStart(2,'0')).join('');
+      if(hash!=='e7318c87a138e49041fca4648937548859edfec48baa6f50d0023d42a1bb96d2') throw new Error('Falha de integridade. Atualize a página.');
+    }
 
     document.open();
     document.write(html);
     document.close();
   }catch(err){
-    document.getElementById("boot").innerHTML="<div><strong>Não consegui carregar o app.</strong><small>Atualize a página. Se persistir, feche e abra novamente pelo atalho.</small></div>";
     console.error(err);
+    status.textContent=err && err.message ? err.message : 'Não foi possível carregar o aplicativo.';
+    bar.style.display='none';
+    retry.style.display='inline-block';
   }
 })();
 </script>
