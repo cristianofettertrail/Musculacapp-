@@ -10,34 +10,49 @@
 </style>
 </head>
 <body>
-<div id="boot"><div class="box"><div class="logo">Fetter Coach</div><div class="status" id="status">Carregando a versão integrada...</div><div class="bar" id="bar"><i></i></div><button id="retry" type="button">TENTAR NOVAMENTE</button></div></div>
+<div id="boot"><div class="box"><div class="logo">Fetter Coach</div><div class="status" id="status">Preparando a Fase 2...</div><div class="bar" id="bar"><i></i></div><button id="retry" type="button">TENTAR NOVAMENTE</button></div></div>
 <script>
 (async function boot(){
   const status=document.getElementById('status');
   const retry=document.getElementById('retry');
   const bar=document.getElementById('bar');
   retry.onclick=()=>location.reload();
+  const PATCH_B64='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';
+  const OLD_HASH='e7318c87a138e49041fca4648937548859edfec48baa6f50d0023d42a1bb96d2';
+  const NEW_HASH='9976357b251688e58363c33ca06c22aef7451d636a57b0e4c9a4a465bd00f228';
+
+  async function ungzipBase64(b64){
+    const binary=atob(b64);
+    const bytes=new Uint8Array(binary.length);
+    for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
+    const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+    return new TextDecoder('utf-8').decode(await new Response(stream).arrayBuffer());
+  }
+
+  async function sha256(text){
+    const hashBuffer=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(hashBuffer)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+
   try{
-    if(typeof DecompressionStream==='undefined') throw new Error('Seu Safari precisa estar atualizado para carregar esta versão.');
-    const paths=Array.from({length:5},(_,i)=>`./app-v6-package/chunk-${String(i).padStart(2,'0')}.b64?v=6.1`);
+    if(typeof DecompressionStream==='undefined') throw new Error('Atualize o Safari para abrir esta versão.');
+    const paths=Array.from({length:5},(_,i)=>`./app-v6-package/chunk-${String(i).padStart(2,'0')}.b64?v=7.2`);
     const responses=await Promise.all(paths.map(path=>fetch(path,{cache:'no-store'})));
-    if(responses.some(r=>!r.ok)) throw new Error('Não foi possível carregar todos os arquivos do aplicativo.');
+    if(responses.some(r=>!r.ok)) throw new Error('Não foi possível carregar os arquivos do aplicativo.');
     const chunks=await Promise.all(responses.map(r=>r.text()));
     const b64=chunks.map(x=>x.trim()).join('');
-    if(b64.length!==39732) throw new Error('Pacote incompleto. Atualize a página.');
+    if(b64.length!==39732) throw new Error('Pacote-base incompleto. Atualize a página.');
 
-    const binary=atob(b64);
-    const compressed=new Uint8Array(binary.length);
-    for(let i=0;i<binary.length;i++) compressed[i]=binary.charCodeAt(i);
-    const decompressedStream=new Blob([compressed]).stream().pipeThrough(new DecompressionStream('gzip'));
-    const buffer=await new Response(decompressedStream).arrayBuffer();
-    const html=new TextDecoder('utf-8').decode(buffer);
+    let html=await ungzipBase64(b64);
+    if(crypto && crypto.subtle && await sha256(html)!==OLD_HASH) throw new Error('Falha de integridade da versão-base.');
 
-    if(crypto && crypto.subtle){
-      const hashBuffer=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(html));
-      const hash=Array.from(new Uint8Array(hashBuffer)).map(b=>b.toString(16).padStart(2,'0')).join('');
-      if(hash!=='e7318c87a138e49041fca4648937548859edfec48baa6f50d0023d42a1bb96d2') throw new Error('Falha de integridade. Atualize a página.');
+    const patchOps=JSON.parse(await ungzipBase64(PATCH_B64));
+    for(const [from,to] of patchOps){
+      if(!html.includes(from)) throw new Error('Não consegui aplicar uma parte da atualização da Fase 2.');
+      html=html.replace(from,to);
     }
+
+    if(crypto && crypto.subtle && await sha256(html)!==NEW_HASH) throw new Error('Falha de integridade após atualizar a Fase 2.');
 
     document.open();
     document.write(html);
